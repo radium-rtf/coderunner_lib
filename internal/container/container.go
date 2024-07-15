@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	dc "github.com/docker/docker/api/types/container"
-	"github.com/khostya/coderunner/internal/docker"
+	"github.com/radium-rtf/coderunner_lib/internal/docker"
 	"sync"
 	"sync/atomic"
 )

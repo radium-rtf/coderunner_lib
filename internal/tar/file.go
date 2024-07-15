@@ -3,7 +3,7 @@ package tar
 import (
 	"archive/tar"
 	"bytes"
-	"github.com/khostya/coderunner/file"
+	"github.com/radium-rtf/coderunner_lib/file"
 	"io"
 )
 

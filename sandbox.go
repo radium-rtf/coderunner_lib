@@ -2,7 +2,7 @@ package coderunner
 
 import (
 	dc "github.com/docker/docker/api/types/container"
-	"github.com/khostya/coderunner/internal/container"
+	"github.com/radium-rtf/coderunner_lib/internal/container"
 )
 
 type Sandbox struct {

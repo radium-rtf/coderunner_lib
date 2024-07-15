@@ -1,4 +1,4 @@
-module github.com/khostya/coderunner
+module github.com/radium-rtf/coderunner_lib
 
 go 1.22.5
 

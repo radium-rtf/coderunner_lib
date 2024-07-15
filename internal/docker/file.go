@@ -3,8 +3,8 @@ package docker
 import (
 	"context"
 	dc "github.com/docker/docker/api/types/container"
-	"github.com/khostya/coderunner/file"
-	"github.com/khostya/coderunner/internal/tar"
+	"github.com/radium-rtf/coderunner_lib/file"
+	"github.com/radium-rtf/coderunner_lib/internal/tar"
 )
 
 func (c Client) WriteFiles(ctx context.Context, id string, files []file.File) error {

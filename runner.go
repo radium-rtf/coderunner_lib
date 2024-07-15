@@ -4,12 +4,12 @@ import (
 	"context"
 	dc "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
-	"github.com/khostya/coderunner/config"
-	"github.com/khostya/coderunner/file"
-	"github.com/khostya/coderunner/internal/container"
-	"github.com/khostya/coderunner/internal/docker"
-	"github.com/khostya/coderunner/limit"
-	"github.com/khostya/coderunner/profile"
+	"github.com/radium-rtf/coderunner_lib/config"
+	"github.com/radium-rtf/coderunner_lib/file"
+	"github.com/radium-rtf/coderunner_lib/internal/container"
+	"github.com/radium-rtf/coderunner_lib/internal/docker"
+	"github.com/radium-rtf/coderunner_lib/limit"
+	"github.com/radium-rtf/coderunner_lib/profile"
 )
 
 type Runner struct {
