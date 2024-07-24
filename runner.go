@@ -26,14 +26,14 @@ func NewRunner(cfg *config.Config, opt ...client.Opt) (*Runner, error) {
 	return &Runner{docker: docker, defaultUser: cfg.User, defaultWorkDir: cfg.Workdir}, nil
 }
 
-func (r *Runner) NewSandbox(ctx context.Context, cmd []string,
+func (r *Runner) NewSandbox(ctx context.Context, cmd string,
 	profile profile.Profile, limits *limit.Limits, files []file.File) (*Sandbox, error) {
 	config := &dc.Config{
 		Image:       profile.Image,
 		StopTimeout: limits.TimeoutInSec,
 		User:        r.defaultUser,
 		WorkingDir:  r.defaultWorkDir,
-		Cmd:         cmd,
+		Cmd:         []string{"/bin/sh", "-c", cmd},
 	}
 	hostConfig := &dc.HostConfig{
 		Resources: dc.Resources{CPUCount: limits.CPUCount, Memory: limits.MemoryInBytes},
