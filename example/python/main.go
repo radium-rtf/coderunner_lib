@@ -15,12 +15,13 @@ import (
 )
 
 const (
-	code = `
+	mainFile = "main.py"
+	mainCode = `
 print(input())
 print(input())
 `
+
 	input     = "1\ninput\n"
-	filename  = "main.py"
 	inputFile = "input.txt"
 
 	timeoutInSec = 1
@@ -42,10 +43,7 @@ func init() {
 func main() {
 	ctx := context.Background()
 
-	profile := profile.Profile{
-		Name:  "python",
-		Image: "python-coderunner:latest",
-	}
+	profile := profile.NewProfile("python", "python-coderunner:latest")
 
 	cfg := config.NewConfig(
 		config.WithUser("sandbox"),
@@ -56,7 +54,7 @@ func main() {
 	limits := limit.NewLimits(limit.WithTimeoutInSec(timeoutInSec))
 
 	files := []file.File{
-		file.NewFile(filename, file.StringContent(code)),
+		file.NewFile(mainFile, file.StringContent(mainCode)),
 		file.NewFile(inputFile, file.StringContent(input)),
 	}
 
@@ -66,7 +64,7 @@ func main() {
 	}
 	defer client.Close()
 
-	cmd := fmt.Sprintf(`cat %s | python3 %s`, inputFile, filename)
+	cmd := fmt.Sprintf(`cat %s | python3 %s`, inputFile, mainFile)
 	sandbox, err := client.NewSandbox(ctx, cmd, profile, limits, files)
 	if err != nil {
 		log.Fatalln(err)

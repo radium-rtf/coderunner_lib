@@ -29,7 +29,7 @@ func NewRunner(cfg *config.Config, opt ...client.Opt) (*Runner, error) {
 func (r *Runner) NewSandbox(ctx context.Context, cmd string,
 	profile profile.Profile, limits *limit.Limits, files []file.File) (*Sandbox, error) {
 	config := &dc.Config{
-		Image:       profile.Image,
+		Image:       string(profile.Image),
 		StopTimeout: limits.TimeoutInSec,
 		User:        r.defaultUser,
 		WorkingDir:  r.defaultWorkDir,
