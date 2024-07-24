@@ -25,6 +25,15 @@ func (s Sandbox) ShowStdout() (string, error) {
 	return s.container.ShowStdout()
 }
 
+func (s Sandbox) ShowStd() (Logs, error) {
+	logs, err := s.container.ShowStd()
+	if err != nil {
+		return Logs{}, err
+	}
+
+	return newLogs(logs), nil
+}
+
 func (s Sandbox) Close() error {
 	return s.container.Close()
 }

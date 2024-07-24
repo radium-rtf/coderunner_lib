@@ -2,9 +2,9 @@ package limit
 
 type Opt func(*Limits)
 
-func WithTimeoutInSec(sec *int) Opt {
+func WithTimeoutInSec(sec int) Opt {
 	return func(limits *Limits) {
-		limits.TimeoutInSec = sec
+		limits.TimeoutInSec = &sec
 	}
 }
 

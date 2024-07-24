@@ -5,6 +5,7 @@ import (
 	"errors"
 	dc "github.com/docker/docker/api/types/container"
 	"github.com/radium-rtf/coderunner_lib/internal/docker"
+	"github.com/radium-rtf/coderunner_lib/internal/info"
 	"sync"
 	"sync/atomic"
 )
@@ -37,6 +38,10 @@ func (c *Container) Start(options dc.StartOptions) error {
 
 func (c *Container) ShowStdout() (string, error) {
 	return c.docker.ShowStdoutContainer(c.ctx, c.id)
+}
+
+func (c *Container) ShowStd() (info.Logs, error) {
+	return c.docker.ShowStdContainer(c.ctx, c.id, dc.LogsOptions{ShowStderr: true, ShowStdout: true})
 }
 
 func (c *Container) Wait() (int64, error) {

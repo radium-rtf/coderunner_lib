@@ -1,12 +1,11 @@
 package docker
 
 import (
-	"bytes"
 	"context"
 	dc "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
-	"github.com/docker/docker/pkg/stdcopy"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+	"github.com/radium-rtf/coderunner_lib/internal/info"
 	"io"
 )
 
@@ -31,20 +30,25 @@ func (c Client) StartContainer(ctx context.Context, id string, options dc.StartO
 }
 
 func (c Client) ShowStdoutContainer(ctx context.Context, id string) (string, error) {
-	reader, err := c.logsContainer(ctx, id, dc.LogsOptions{ShowStdout: true})
+	logs, err := c.ShowStdContainer(ctx, id, dc.LogsOptions{ShowStdout: true})
 	if err != nil {
 		return "", err
 	}
+	return logs.Stdout, nil
+}
+
+func (c Client) ShowStdContainer(ctx context.Context, id string, options dc.LogsOptions) (info.Logs, error) {
+	reader, err := c.logsContainer(ctx, id, options)
+	if err != nil {
+		return info.Logs{}, err
+	}
 	defer reader.Close()
 
-	var buf bytes.Buffer
-	_, err = stdcopy.StdCopy(&buf, &bytes.Buffer{}, reader)
-	return buf.String(), err
+	return info.NewLogs(reader)
 }
 
 func (c Client) logsContainer(ctx context.Context, id string, options dc.LogsOptions) (io.ReadCloser, error) {
-	reader, err := c.docker.ContainerLogs(ctx, id, options)
-	return reader, err
+	return c.docker.ContainerLogs(ctx, id, options)
 }
 
 func (c Client) ContainerWait(ctx context.Context, id string, running dc.WaitCondition) (<-chan dc.WaitResponse, <-chan error) {

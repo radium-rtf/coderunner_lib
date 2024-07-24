@@ -7,14 +7,18 @@ import (
 	"io"
 )
 
+const (
+	modeALL = 777
+)
+
 func NewTarArchive(files []file.File, uid int) (io.Reader, error) {
 	var buf bytes.Buffer
 	tarWriter := tar.NewWriter(&buf)
 	for _, file := range files {
 		hdr := &tar.Header{
 			Name: file.Name,
-			Mode: 777,
-			Size: int64(len(file.Content)),
+			Mode: modeALL,
+			Size: file.Content.Size(),
 
 			Uid: uid,
 		}
@@ -23,7 +27,7 @@ func NewTarArchive(files []file.File, uid int) (io.Reader, error) {
 			return nil, err
 		}
 
-		if _, err := tarWriter.Write([]byte(file.Content)); err != nil {
+		if _, err := tarWriter.Write(file.Content.GetBytes()); err != nil {
 			return nil, err
 		}
 	}

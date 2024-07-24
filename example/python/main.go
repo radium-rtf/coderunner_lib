@@ -13,6 +13,19 @@ import (
 	"os"
 )
 
+const (
+	code = `
+print(11)
+print(111)
+print(1111)
+print(11111)
+print(111111)
+`
+	filename = "main.py"
+
+	timeoutInSec = 1
+)
+
 var (
 	dockerHost string
 )
@@ -40,18 +53,9 @@ func main() {
 		config.WithWorkDir("/sandbox"),
 	)
 
-	limits := limit.NewLimits()
+	limits := limit.NewLimits(limit.WithTimeoutInSec(timeoutInSec))
 
-	code := `
-print(11)
-print(111)
-print(1111)
-print(11111)
-print(111111)
-`
-	files := []file.File{
-		{Name: "main.py", Content: code},
-	}
+	files := []file.File{file.NewFile(filename, file.StringContent(code))}
 
 	client, err := coderunner.NewRunner(cfg, client.WithHost(dockerHost))
 	if err != nil {
@@ -59,7 +63,7 @@ print(111111)
 	}
 	defer client.Close()
 
-	cmd := []string{"python3", "main.py"}
+	cmd := []string{"python3", filename}
 	sandbox, err := client.NewSandbox(ctx, cmd, profile, limits, files)
 	if err != nil {
 		log.Fatalln(err)
@@ -76,10 +80,12 @@ print(111111)
 	}
 	log.Println("statusCode", statusCode)
 
-	out, err := sandbox.ShowStdout()
+	out, err := sandbox.ShowStd()
 	if err != nil {
 		log.Println("err", err.Error())
 	}
 
-	log.Println(out)
+	log.Println(out.StdOut)
+	log.Println("stdErr:")
+	log.Println(out.StdErr)
 }
