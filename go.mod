@@ -3,7 +3,7 @@ module github.com/radium-rtf/coderunner_lib
 go 1.22.5
 
 require (
-	github.com/docker/docker v27.0.3+incompatible
+	github.com/docker/docker v27.1.1+incompatible
 	github.com/opencontainers/image-spec v1.1.0
 )
 
