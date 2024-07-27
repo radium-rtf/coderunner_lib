@@ -29,11 +29,10 @@ func NewRunner(cfg *config.Config, opt ...client.Opt) (*Runner, error) {
 func (r *Runner) NewSandbox(ctx context.Context, cmd string,
 	profile profile.Profile, limits *limit.Limits, files []file.File) (*Sandbox, error) {
 	config := &dc.Config{
-		Image:       string(profile.Image),
-		StopTimeout: limits.TimeoutInSec,
-		User:        r.defaultUser,
-		WorkingDir:  r.defaultWorkDir,
-		Cmd:         []string{"/bin/sh", "-c", cmd},
+		Image:      string(profile.Image),
+		User:       r.defaultUser,
+		WorkingDir: r.defaultWorkDir,
+		Cmd:        []string{"/bin/sh", "-c", cmd},
 	}
 	hostConfig := &dc.HostConfig{
 		Resources: dc.Resources{CPUCount: limits.CPUCount, Memory: limits.MemoryInBytes},
@@ -49,8 +48,8 @@ func (r *Runner) NewSandbox(ctx context.Context, cmd string,
 		return nil, err
 	}
 
-	container := container.NewContainer(ctx, response.ID, r.docker)
-	return newSandbox(container), nil
+	container := container.NewContainer(ctx, response.ID, r.docker, limits.Timeout)
+	return newSandbox(container, limits.Timeout), nil
 }
 
 func (r *Runner) Close() error {

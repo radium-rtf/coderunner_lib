@@ -1,10 +1,12 @@
 package limit
 
+import "time"
+
 type Opt func(*Limits)
 
-func WithTimeoutInSec(sec int) Opt {
+func WithTimeout(timeout time.Duration) Opt {
 	return func(limits *Limits) {
-		limits.TimeoutInSec = &sec
+		limits.Timeout = timeout
 	}
 }
 

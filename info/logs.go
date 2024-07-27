@@ -7,8 +7,7 @@ import (
 )
 
 type Logs struct {
-	Stdout string
-	Stderr string
+	StdOut, StdErr string
 }
 
 func NewLogs(reader io.ReadCloser) (Logs, error) {
@@ -19,7 +18,7 @@ func NewLogs(reader io.ReadCloser) (Logs, error) {
 		return Logs{}, err
 	}
 	return Logs{
-		Stderr: stderr.String(),
-		Stdout: stdout.String(),
+		StdErr: stderr.String(),
+		StdOut: stdout.String(),
 	}, nil
 }

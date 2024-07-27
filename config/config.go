@@ -1,10 +1,5 @@
 package config
 
-const (
-	DockerWorkDir = "/sandbox"
-	DefaultUser   = "sandbox"
-)
-
 type Config struct {
 	User       string
 	Uid        int

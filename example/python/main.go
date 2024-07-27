@@ -12,6 +12,7 @@ import (
 	"github.com/radium-rtf/coderunner_lib/profile"
 	"log"
 	"os"
+	"time"
 )
 
 const (
@@ -24,7 +25,7 @@ print(input())
 	input     = "1\ninput\n"
 	inputFile = "input.txt"
 
-	timeoutInSec = 1
+	timeout = time.Second * 10
 )
 
 var (
@@ -51,7 +52,10 @@ func main() {
 		config.WithWorkDir("/sandbox"),
 	)
 
-	limits := limit.NewLimits(limit.WithTimeoutInSec(timeoutInSec))
+	limits := limit.NewLimits(
+		limit.WithTimeout(timeout),
+		limit.WithMemoryInBytes(1024*1024*6),
+	)
 
 	files := []file.File{
 		file.NewFile(mainFile, file.StringContent(mainCode)),
@@ -89,4 +93,18 @@ func main() {
 	log.Println(out.StdOut)
 	log.Println("stdErr:")
 	log.Println(out.StdErr)
+
+	finishedAt, err := sandbox.FinishedAt()
+	if err != nil {
+		log.Println("err", err.Error())
+	}
+	log.Println("finished at", finishedAt.String())
+
+	info, err := sandbox.Info()
+	if err != nil {
+		log.Println("err", err.Error())
+	}
+
+	log.Println(info)
+	log.Println(info.Time.Diff().String())
 }

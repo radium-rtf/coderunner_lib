@@ -1,16 +1,16 @@
 package limit
 
+import "time"
+
 type Limits struct {
-	TimeoutInSec  *int
+	Timeout       time.Duration
 	MemoryInBytes int64
 	CPUCount      int64
 }
 
 func NewLimits(opts ...Opt) *Limits {
-	var sec = 600
-
 	defaultCfg := &Limits{
-		TimeoutInSec:  &sec,
+		Timeout:       time.Second * 30,
 		MemoryInBytes: 1024 * 1024 * 20,
 		CPUCount:      1,
 	}
